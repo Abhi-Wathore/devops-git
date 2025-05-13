@@ -223,8 +223,6 @@ terraform apply
 
 - [Terraform AWS Provider Documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 - [Terraform Tutorials by HashiCorp](https://developer.hashicorp.com/terraform/tutorials)
-- [Creating AWS VPC Using Terraform](https://www.geeksforgeeks.org/create-aws-vpc-using-terraform/)
-
 ---
 
 For any issues or contributions, please open an issue or submit a pull request on the [GitHub repository](https://github.com/Abhi-Wathore/terraform.git).
