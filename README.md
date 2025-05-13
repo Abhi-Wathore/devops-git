@@ -33,7 +33,7 @@ aws configure
 
 ## Terraform Components Explained
 
-### 1. `main.tf`(main.tf)
+### 1. `main.tf`
 
 The `main.tf` file is the core of the Terraform configuration. It defines the infrastructure resources to be created, such as EC2 instances, VPCs, subnets, and security groups.
 
