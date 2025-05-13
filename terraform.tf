@@ -12,11 +12,17 @@ provider "aws" {
 
 resource "aws_instance" "web" {
   ami           = "ami-0dd574ef87b79ac6c" 
-  instance_type = "t3.micro"
+  instance_type = var.instance_type
   key_name = "new-key"
 
   tags = {
     Name = "WebServer"
   }
+  
+}
+
+variable "instance_type" {
+  description = "Type of instance to create"
+  default     = "t3.micro"
   
 }
