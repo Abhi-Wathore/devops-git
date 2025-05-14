@@ -57,11 +57,5 @@ resource "aws_route_table" "myroute" {
 
 data "aws_security_group" "mysg" {
   vpc_id = aws_vpc.mainvpc.id
-  filter {
-    name   = var.filter_name
-    # The filter_name variable should be defined in your variables.tf file
-    values = [var.security_group_name]
-    # The security group name should be defined in your variables.tf file
-  }
    
 }

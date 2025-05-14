@@ -15,8 +15,6 @@ variable "availability_zone" {}
 
 variable "route_cidr" {}
 
-variable "filter_name" {}
-
 variable "security_group_name" {}
 
 variable "pub_subnet_name" {}
