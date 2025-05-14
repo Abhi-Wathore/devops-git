@@ -1,5 +1,13 @@
 # This is the main Terraform configuration file that sets up the AWS infrastructure.
 
+terraform {
+backend "s3" {
+bucket = "abhi99-terraform"
+key = "terraform.tfstate"
+region = "eu-north-1"
+}
+}
+
 module "instances" {
     source = "./EC2_Instance"
     instance_name = var.instance_name
