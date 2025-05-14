@@ -4,14 +4,6 @@
 # The backend configuration is used to store the Terraform state file in an S3 bucket.
 
 
-terraform {
-  backend "s3" {
-    bucket         = var.bucket_name
-    region         = var.bucket_region
-    key            = var.bucket_key
-  }
-
-}
 
 provider "aws" {
   region = var.aws_region
