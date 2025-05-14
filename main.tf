@@ -28,7 +28,6 @@ module "vpc" {
     pvt_subnet_cidr = var.pvt_subnet_cidr
     availability_zone = var.availability_zone
     route_cidr = var.route_cidr
-    filter_name = var.filter_name
     security_group_name = var.security_group_name
     pub_subnet_name = var.pub_subnet_name
     pvt_subnet_name = var.pvt_subnet_name
