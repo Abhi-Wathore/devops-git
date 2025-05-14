@@ -31,13 +31,7 @@ variable "availability_zone" {
 variable "route_cidr" {
     description = "CIDR block for the route table"
     type        = string
-    default     = "0.0.0.0.0/0"
-}
-
-variable "filter_name" {
-    description = "Name of the security group filter"
-    type        = string
-    default     = "group_name"
+    default     = "0.0.0.0/0"
 }
 
 variable "security_group_name" {
