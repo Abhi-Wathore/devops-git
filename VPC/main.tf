@@ -12,7 +12,7 @@ resource "aws_subnet" "pub-subnet" {
   map_public_ip_on_launch = true
     availability_zone = var.availability_zone
     tags = {
-      Name = var.pub-subnet-name
+      Name = var.pub_subnet_name
     }
     # The map_public_ip_on_launch attribute is set to true to assign public IPs to instances in this subnet
 }
@@ -22,7 +22,7 @@ resource "aws_subnet" "pvt-subnet" {
   cidr_block        = var.pvt_subnet_cidr
   availability_zone = var.availability_zone
   tags = {
-    Name = var.pvt-subnet-name
+    Name = var.pvt_subnet_name
   }
     # The private subnet does not have the map_public_ip_on_launch attribute set, so instances in this subnet will not receive public IPs
   

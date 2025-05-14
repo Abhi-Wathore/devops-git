@@ -19,6 +19,6 @@ variable "filter_name" {}
 
 variable "security_group_name" {}
 
-variable "pub-subnet-name" {}
+variable "pub_subnet_name" {}
 
-variable "pvt-subnet-name" {}
+variable "pvt_subnet_name" {}
