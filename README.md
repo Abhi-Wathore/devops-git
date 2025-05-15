@@ -1,228 +1,220 @@
 # Terraform AWS Infrastructure Automation
 
-## Overview
+This repository contains modular Terraform configurations designed to provision AWS infrastructure components, including Virtual Private Clouds (VPCs) and EC2 instances.
 
-This repository contains Terraform configurations to automate the provisioning of AWS infrastructure components, including EC2 instances and Virtual Private Clouds (VPCs). Terraform enables Infrastructure as Code (IaC), allowing you to define and manage your infrastructure using declarative configuration files.
+# What is Terraform?
 
-## What is Terraform?
+Terraform is an open-source Infrastructure as Code (IaC) tool developed by HashiCorp that allows users to define and provision data center infrastructure using a declarative configuration language. It enables infrastructure automation across multiple service providers, including AWS, Azure, Google Cloud, and many others.
 
-Terraform is an open-source IaC tool developed by HashiCorp. It allows users to define and provision data center infrastructure using a high-level configuration language known as HashiCorp Configuration Language (HCL). Terraform supports multiple cloud providers, including AWS, Azure, and Google Cloud Platform, enabling consistent and repeatable infrastructure deployment across different environments.
 
-## Repository Structure
+## Advantages of Terraform
 
-The repository is organized as follows:
+- 🚀 Automation: Automates infrastructure provisioning, scaling, and configuration.
+- 🔄 Repeatability: Code-based infrastructure ensures repeatable and consistent deployments.
+- ☁️ Multi-cloud Support: Works across multiple providers like AWS, Azure, GCP, and on-premises systems.
+- 📖 Version Control: Infrastructure changes can be tracked using Git or other version control systems.
+- 🛠️ Modularization: Reuse components using modules to manage infrastructure efficiently.
+- 🔍 Preview Changes: See proposed changes before applying with `terraform plan`.
+- 💥 State Management: Keeps track of real-time infrastructure via a state file, enabling efficient updates.
 
-- `main.tf` – Primary configuration file defining the desired infrastructure resources.
-- `variables.tf` – Declares input variables to parameterize configurations.
-- `outputs.tf` – Specifies output values to display after infrastructure deployment.
-- `provider.tf` – Configures the cloud provider (e.g., AWS) and authentication details.
-- `data.tf` – Defines data sources to fetch information about existing resources.
-- `provisioners.tf` – Contains provisioner blocks to execute scripts on created resources.
 
-## Prerequisites
 
-Before using the Terraform configurations, ensure you have the following:
+## 📚 Table of Contents
 
-- [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) installed.
-- An AWS account with appropriate permissions.
-- AWS credentials configured locally, typically via the AWS CLI:
+- [Overview](#overview)
+- [Prerequisites](#prerequisites)
+- [Module Structure](#module-structure)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+  - [VPC Module](#vpc-module)
+  - [EC2 Instance Module](#ec2-instance-module)
+- [Variables](#variables)
+- [Outputs](#outputs)
+- [Provisioning Steps](#provisioning-steps)
+- [Destroying Infrastructure](#destroying-infrastructure)
+- [Best Practices](#best-practices)
+- [License](#license)
+
+## 📖 Overview
+
+Terraform is an open-source Infrastructure as Code (IaC) tool developed by HashiCorp. It enables users to define and provision infrastructure using a declarative configuration language. This repository leverages Terraform to automate the deployment of AWS resources, promoting consistency and scalability in infrastructure management.
+
+## ✅ Prerequisites
+
+Before utilizing this repository, ensure you have the following installed and configured:
+
+- [Terraform](https://www.terraform.io/downloads.html) (v1.0 or higher)
+- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
+- An AWS account with appropriate permissions
+- Configured AWS credentials (`~/.aws/credentials`)
+
+## 📁 Module Structure
+
+The repository is organized into modular components for reusability and clarity:
+
+```
+terraform/
+├── main.tf
+├── variables.tf
+├── outputs.tf
+├── EC2_Instance/
+│   ├── main.tf
+│   ├── variables.tf
+│   └── outputs.tf
+└── VPC/
+    ├── main.tf
+    ├── variables.tf
+    └── outputs.tf
+```
+
+## 🚀 Getting Started
+
+1. **Clone the Repository**:
+
+   ```bash
+   git clone https://github.com/Abhi-Wathore/terraform.git
+   cd terraform
+   ```
+
+2. **Initialize Terraform**:
+
+   ```bash
+   terraform init
+   ```
+
+3. **Review and Customize Variables**:
+
+   Edit the `variables.tf` files in the root and module directories to customize the infrastructure parameters as needed.
+
+4. **Plan the Deployment**:
+
+   ```bash
+   terraform plan
+   ```
+
+5. **Apply the Configuration**:
+
+   ```bash
+   terraform apply
+   ```
+
+## 🧱 Usage
+
+### VPC Module
+
+The VPC module provisions a Virtual Private Cloud with public and private subnets, an internet gateway, and route tables.
+
+**Example Configuration**:
+
+```hcl
+module "vpc" {
+  source               = "./VPC"
+  vpc_name             = var.vpc_name
+  vpc_cidr             = var.vpc_cidr
+  pub_subnet_cidr      = var.pub_subnet_cidr
+  pvt_subnet_cidr      = var.pvt_subnet_cidr
+  availability_zone    = var.availability_zone
+  route_cidr           = var.route_cidr
+  filter_name          = var.filter_name
+  security_group_name  = var.security_group_name
+  pub_subnet_name      = var.pub_subnet_name
+  pvt_subnet_name      = var.pvt_subnet_name
+}
+```
+
+### EC2 Instance Module
+
+The EC2_Instance module launches an EC2 instance within the specified VPC and subnet, with configurations for AMI, instance type, and key pair.
+
+**Example Configuration**:
+
+```hcl
+module "instances" {
+  source         = "./EC2_Instance"
+  instance_name  = var.instance_name
+  ami            = var.ami
+  instance_type  = var.instance_type
+  key_name       = var.key_name
+  bucket_name    = var.bucket_name
+  bucket_key     = var.bucket_key
+  bucket_region  = var.bucket_region
+  aws_region     = var.aws_region
+}
+```
+
+## 🔧 Variables
+
+Key variables utilized across modules include:
+
+- **vpc_name**: Name of the VPC.
+- **vpc_cidr**: CIDR block for the VPC (e.g., "10.0.0.0/16").
+- **pub_subnet_cidr**: CIDR block for the public subnet (e.g., "10.0.1.0/24").
+- **pvt_subnet_cidr**: CIDR block for the private subnet (e.g., "10.0.2.0/24").
+- **availability_zone**: AWS availability zone (e.g., "eu-north-1a").
+- **route_cidr**: CIDR block for route table (e.g., "0.0.0.0/0").
+- **filter_name**: Name filter for security group lookup.
+- **security_group_name**: Name of the security group.
+- **pub_subnet_name**: Name tag for the public subnet.
+- **pvt_subnet_name**: Name tag for the private subnet.
+- **instance_name**: Name tag for the EC2 instance.
+- **ami**: AMI ID for the EC2 instance.
+- **instance_type**: EC2 instance type (e.g., "t2.micro").
+- **key_name**: Name of the SSH key pair.
+- **bucket_name**: Name of the S3 bucket for backend state.
+- **bucket_key**: Key path within the S3 bucket for the state file.
+- **bucket_region**: AWS region where the S3 bucket is located.
+- **aws_region**: AWS region for resource deployment.
+
+## 📤 Outputs
+
+The modules expose several outputs to provide information about the created resources:
+
+- **vpc_id**: ID of the created VPC.
+- **public_subnet_ids**: IDs of the public subnets.
+- **private_subnet_ids**: IDs of the private subnets.
+- **instance_id**: ID of the EC2 instance.
+- **instance_public_ip**: Public IP address of the EC2 instance.
+
+## 🛠️ Provisioning Steps
+
+1. **Initialize Terraform**:
+
+   ```bash
+   terraform init
+   ```
+
+2. **Validate Configuration**:
+
+   ```bash
+   terraform validate
+   ```
+
+3. **Plan Infrastructure Changes**:
+
+   ```bash
+   terraform plan
+   ```
+
+4. **Apply Configuration**:
+
+   ```bash
+   terraform apply
+   ```
+
+## 🧹 Destroying Infrastructure
+
+To tear down all resources managed by this Terraform configuration:
 
 ```bash
-aws configure
+terraform destroy
 ```
 
-## Terraform Components Explained
+Confirm the prompt to proceed with the destruction of resources.
 
-### 1. `main.tf`
+## 📝 Best Practices
 
-The `main.tf` file is the core of the Terraform configuration. It defines the infrastructure resources to be created, such as EC2 instances, VPCs, subnets, and security groups.
-
-```hcl
-resource "aws_instance" "example" {
-  ami           = var.ami_id
-  instance_type = var.instance_type
-  subnet_id     = aws_subnet.example.id
-  tags = {
-    Name = "ExampleInstance"
-  }
-}
-```
-
-### 2. `variables.tf`
-
-This file declares input variables, allowing customization of configurations without modifying the core files.
-
-```hcl
-variable "ami_id" {
-  description = "AMI ID for the EC2 instance"
-  type        = string
-}
-
-variable "instance_type" {
-  description = "EC2 instance type"
-  type        = string
-  default     = "t2.micro"
-}
-```
-
-### 3. `outputs.tf`
-
-Defines output values to be displayed after applying the Terraform configuration.
-
-```hcl
-output "instance_id" {
-  description = "The ID of the EC2 instance"
-  value       = aws_instance.example.id
-}
-```
-
-### 4. `provider.tf`
-
-Specifies the provider configuration, including the cloud provider and region.
-
-```hcl
-provider "aws" {
-  region = var.aws_region
-}
-```
-
-### 5. `data.tf` (Data Sources)
-
-Data sources allow Terraform to fetch information about existing resources.
-
-```hcl
-data "aws_ami" "ubuntu" {
-  most_recent = true
-  owners      = ["099720109477"] # Canonical
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-}
-```
-
-### 6. `provisioners.tf` (Provisioner Blocks)
-
-Provisioners execute scripts on the local machine or on a remote resource after it's created.
-
-```hcl
-resource "aws_instance" "example" {
-  # ... other configurations ...
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo apt-get update",
-      "sudo apt-get install -y nginx"
-    ]
-  }
-}
-```
-
-## Creating an EC2 Instance: Step-by-Step
-
-1. **Initialize Terraform:**
-
-```bash
-terraform init
-```
-
-2. **Review the Execution Plan:**
-
-```bash
-terraform plan
-```
-
-3. **Apply the Configuration:**
-
-```bash
-terraform apply
-```
-
-4. **Verify the Deployment:**
-
-After the apply completes, Terraform will output the instance ID and other specified outputs.
-
-## Creating a VPC: Step-by-Step
-
-1. **Define the VPC:**
-
-```hcl
-resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
-  tags = {
-    Name = "MainVPC"
-  }
-}
-```
-
-2. **Create Subnets:**
-
-```hcl
-resource "aws_subnet" "public" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-east-1a"
-  tags = {
-    Name = "PublicSubnet"
-  }
-}
-```
-
-3. **Add an Internet Gateway:**
-
-```hcl
-resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.main.id
-  tags = {
-    Name = "MainIGW"
-  }
-}
-```
-
-4. **Create a Route Table:**
-
-```hcl
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gw.id
-  }
-  tags = {
-    Name = "PublicRouteTable"
-  }
-}
-```
-
-5. **Associate Route Table with Subnet:**
-
-```hcl
-resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public.id
-  route_table_id = aws_route_table.public.id
-}
-```
-
-6. **Deploy the VPC:**
-
-```bash
-terraform init
-terraform plan
-terraform apply
-```
-
-## Best Practices
-
-- **State Management:** Use remote backends like AWS S3 with state locking via DynamoDB.
-- **Modularization:** Break down configurations into reusable modules.
-- **Version Control:** Use Git to manage your configuration files.
-- **Sensitive Data:** Use environment variables or secret managers for credentials.
-
-## Resources
-
-- [Terraform AWS Provider Documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-- [Terraform Tutorials by HashiCorp](https://developer.hashicorp.com/terraform/tutorials)
----
-
-For any issues or contributions, please open an issue or submit a pull request on the [GitHub repository](https://github.com/Abhi-Wathore/terraform.git).
+- **State Management**: Utilize remote state storage (e.g., S3 with DynamoDB locking) for collaborative environments.
+- **Variable Management**: Keep sensitive variables (e.g., AWS credentials) secure and avoid hardcoding them.
+- **Modularization**: Encapsulate reusable configurations into modules for better maintainability.
+- **Version Control**: Pin provider and module versions to prevent unexpected changes.
+- **Documentation**: Maintain up-to-date documentation for each module, including input/output variables and usage examples.
