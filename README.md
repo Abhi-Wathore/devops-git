@@ -30,10 +30,9 @@ Terraform is an open-source Infrastructure as Code (IaC) tool developed by Hashi
   - [EC2 Instance Module](#ec2-instance-module)
 - [Variables](#variables)
 - [Outputs](#outputs)
-- [Provisioning Steps](#provisioning-steps)
+- [Provisioning Steps](provisioning-steps)
 - [Destroying Infrastructure](#destroying-infrastructure)
 - [Best Practices](#best-practices)
-- [License](#license)
 
 ## 📖 Overview
 
